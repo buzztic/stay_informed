@@ -6,24 +6,8 @@ import os
 import json
 
 NEWS_FEEDS = {
-    "france": {
-        "le monde": "https://www.lemonde.fr/rss/en_continu.xml",
-        "liberation": "https://www.liberation.fr/arc/outboundfeeds/rss/?outputtype=xml",
-        "france info": "https://www.francetvinfo.fr/titres.rss"
-    },
-    "belgium":{
-        "l'avenir": "https://www.lavenir.net/arc/outboundfeeds/rss/?outputType=xml",
-        "la libre": "https://www.lalibre.be/arc/outboundfeeds/rss/?outputType=xml",
-
-    },
-    "england": {
-        "metro": "https://metro.co.uk/feed/",
-        "the daily telegraph": "https://www.telegraph.co.uk/rss.xml",
-        "bbc": "http://feeds.bbci.co.uk/news/world/rss.xml"},
-    "germany": {
-        "sueddeutsche": "https://rss.sueddeutsche.de/alles",
-        "die welt": "https://www.welt.de/feeds/latest.rss",
-        "rtl": "https://www.rtl.de/rss/feed/news"
+    "World": {
+        "NewYork Times": "https://rss.nytimes.com/services/xml/rss/nyt/World.xml"
     }
 }
 
@@ -55,7 +39,7 @@ def save_all_feeds():
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'start_date': datetime(2024, 7, 10),
+    'start_date': datetime(2024, 7, 11),
     'email_on_failure': False,
     'email_on_retry': False,
     'retries': 1,
@@ -74,5 +58,6 @@ with DAG(
         task_id='save_all_feeds',
         python_callable = save_all_feeds,
     )
+
 
 save_feeds_task
