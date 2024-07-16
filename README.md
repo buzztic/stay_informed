@@ -1,6 +1,6 @@
 # ⏱️ Stay informed
 
-*Get a global view of news in less than 5 minutes a day* 
+*Get a global view of news in less than 5 minutes a day*
 
 📚 Aggregate and clean news from a plurality of sources
 
@@ -18,3 +18,5 @@
 * Create a PR for merging develop on main
     * Need to be validated by a peer
 * Merge develop on main
+
+## Testing comment
