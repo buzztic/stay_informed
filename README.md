@@ -20,3 +20,8 @@
 * Merge develop on main
 
 ## Testing comment
+
+
+## GCP connection
+
+In order to works with GCP, you need to add you creds.json from a service account into the folder `credentials/` and you need to update the env `GCP_CREDS` too.
