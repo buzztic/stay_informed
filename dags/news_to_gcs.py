@@ -22,7 +22,7 @@ def process_rss_feeds(**kwargs):
     ti = kwargs['ti']
     csv_data = ti.xcom_pull(task_ids='get_csv_data')
     gcs_hook = GCSHook()
-    execution_date = kwargs['execution_date'].strftime('%Y-%m-%d')
+    execution_date = datetime.today.strftime("%Y%m%d-%H%M%S")
     raw_objects = []
     for row in csv_data:
         country = row['country']
@@ -47,8 +47,6 @@ def process_rss_feeds(**kwargs):
             print(f"Successfully uploaded {object_name}")
         else:
             print(f"Failed to fetch RSS feed from {url}")
-    return raw_objects
-
 
 
 dag = DAG(
