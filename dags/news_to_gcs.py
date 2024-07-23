@@ -5,13 +5,15 @@ from datetime import  datetime
 import csv
 import requests
 import io
+import os
+
+BUCKET = os.getenv('BUCKET_NAME')
 
 def get_csv_data(**kwargs):
     gcs_hook = GCSHook()
-    bucket_name = 'le-wagon-project-airflow-test'
     object_name = 'rss_feeds.csv'
 
-    file_content = gcs_hook.download(bucket_name, object_name)
+    file_content = gcs_hook.download(BUCKET, object_name)
     csv_data = csv.DictReader(io.StringIO(file_content.decode('utf-8')))
 
     return list(csv_data)
@@ -20,7 +22,6 @@ def process_rss_feeds(**kwargs):
     ti = kwargs['ti']
     csv_data = ti.xcom_pull(task_ids='get_csv_data')
     gcs_hook = GCSHook()
-    output_bucket = 'le-wagon-project-airflow-test'
     execution_date = kwargs['execution_date'].strftime('%Y-%m-%d')
     raw_objects = []
     for row in csv_data:
@@ -37,7 +38,7 @@ def process_rss_feeds(**kwargs):
 
             # Upload the content to GCS
             gcs_hook.upload(
-                bucket_name=output_bucket,
+                bucket_name=BUCKET,
                 object_name=object_name,
                 data=xml_content,
                 mime_type='application/xml'
