@@ -1,4 +1,8 @@
-from airflow.providers.google.cloud.operators.bigquery import BigQueryCreateEmptyDatasetOperator, BigQueryGetDatasetOperator
+from airflow.providers.google.cloud.operators.bigquery import (
+    BigQueryCreateEmptyDatasetOperator, 
+    BigQueryGetDatasetOperator, 
+    BigQueryExecuteQueryOperator
+)
 from airflow import DAG
 from datetime import datetime
 import os
@@ -25,4 +29,21 @@ with DAG(
         trigger_rule='one_failed'
     )
 
+    create_raw_table = BigQueryExecuteQueryOperator(
+        task_id="create_raw_table",
+        sql=f"""
+            CREATE TABLE IF NOT EXISTS {DATASET_NAME}.raw (
+            title STRING NOT NULL,
+            link STRING NOT NULL,
+            summary STRING NOT NULL,
+            authors STRING,
+            published DATETIME NOT NULL,
+            tags STRING,
+            inserted_at TIMESTAMP NOT NULL,
+            file_name STRING NOT NULL,
+        )""",
+        use_legacy_sql=False,
+    )
+
     get_dataset >> create_dataset
+    get_dataset >> create_raw_table
