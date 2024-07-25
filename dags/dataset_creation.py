@@ -33,14 +33,14 @@ with DAG(
         task_id="create_raw_table",
         sql=f"""
             CREATE TABLE IF NOT EXISTS {DATASET_NAME}.raw (
-            title STRING NOT NULL,
-            link STRING NOT NULL,
-            summary STRING NOT NULL,
+            title STRING,
+            link STRING,
+            summary STRING,
             authors STRING,
-            published DATETIME NOT NULL,
+            published STRING,
             tags STRING,
-            inserted_at TIMESTAMP NOT NULL,
-            file_name STRING NOT NULL,
+            inserted_at STRING,
+            file_name STRING,
         )""",
         use_legacy_sql=False,
     )
