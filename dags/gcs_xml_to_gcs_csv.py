@@ -70,7 +70,7 @@ def buffer_csv_data(data:list):
 dag = DAG(
     'GCS_xml_to_GCS_csv',
     description='Process RSS feeds from CSV file',
-    start_date=datetime(2024, 7, 18),
+    start_date=datetime(2024, 6, 24),
     schedule_interval='@daily',
     catchup = False
 )
