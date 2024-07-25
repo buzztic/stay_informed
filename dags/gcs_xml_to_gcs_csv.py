@@ -72,7 +72,7 @@ dag = DAG(
     description='Process RSS feeds from CSV file',
     start_date=datetime(2024, 6, 24),
     schedule_interval='@daily',
-    catchup = False
+    catchup = True
 )
 
 with dag:
