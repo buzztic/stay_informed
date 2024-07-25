@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "news-feed"
+name = "stay_informed"
 version = "0.1.0"
 description = ""
 authors = ["Thomas Cadet <thomas.cadet@gmail.com>"]
@@ -9,6 +9,7 @@ readme = "README.md"
 python = ">=3.12,<3.13"
 apache-airflow = {extras = ["google"], version = "^2.9.3"}
 apache-airflow-providers-google = "^10.21.0"
+feedparser = "^6.0.11"
 
 [build-system]
 requires = ["poetry-core"]
