@@ -1,0 +1,14 @@
+services:
+  dbt:
+    image: ghcr.io/dbt-labs/dbt-bigquery:1.8.2
+    volumes:
+      - $dbtpath:/usr/app
+      - $pfpath:/root/.dbt/profiles.yml
+      - $sapath:/dbt/stayinformed.json
+    working_dir: /usr/app
+    command:
+    #  - /bin/sh
+    #  - cd /usr/app
+    #  - run --folder dbt_project
+    #  - run --help
+     - run
