@@ -39,7 +39,11 @@ def create_query(**kwargs):
     return INSERT_ROWS_QUERY
 
 
-with DAG(dag_id="gcs_csv_to_big_query", start_date=datetime(2024, 6, 24), catchup = True) as dag:
+with DAG(
+    dag_id="gcs_csv_to_big_query", 
+    start_date=datetime(2024, 6, 24), 
+    catchup = True,
+    ):
 
 
 
@@ -61,14 +65,16 @@ with DAG(dag_id="gcs_csv_to_big_query", start_date=datetime(2024, 6, 24), catchu
     )
 
     insert_query_job = BigQueryInsertJobOperator(
-    task_id="insert_query_job",
-    configuration={
-            "query": {
-                "query": "{{  ti.xcom_pull(task_ids='generate_query')}}",
-                "useLegacySql": False,
-                "priority": "BATCH",
-            }
-        }
+        task_id="insert_query_job",
+        configuration={
+                "query": {
+                    "query": "{{  ti.xcom_pull(task_ids='generate_query')}}",
+                    "useLegacySql": False,
+                    "priority": "BATCH",
+                }
+            },
+        retries=2,
+        retry_exponential_backoff=True
     )
 
 
