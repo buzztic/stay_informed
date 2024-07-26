@@ -51,9 +51,9 @@ def parse_xml(**kwargs):
             'title': line.get('title', ''),
             'link': line.get('link', ''),
             'summary': line.get('summary', ''),
-            'authors': [author.get('name', '') for author in line.get('authors', [])],
+            'authors': ','.join([author.get('name', '') for author in line.get('authors', [])]),
             'published': line.get('published', ''),
-            'tags': [tag.get('term', '') for tag in line.get('tags', [])]
+            'tags': ','.join([tag.get('term', '') for tag in line.get('tags', [])])
         }
         line_info['inserted_at'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         line_info['file_name'] = kwargs['source']
@@ -62,6 +62,7 @@ def parse_xml(**kwargs):
 
 def buffer_csv_data(data:list):
   df = pd.DataFrame(data)
+  df = df.astype(str)
   csv_buffer = io.StringIO()
   df.to_csv(csv_buffer, index=False, encoding = 'utf-8')
   csv_content = csv_buffer.getvalue()
