@@ -1,10 +1,6 @@
 from datetime import datetime
 
-from airflow import DAG, XComArg
-from airflow.decorators import task
-from airflow.providers.amazon.aws.hooks.s3 import S3Hook
-from airflow.providers.amazon.aws.operators.s3 import S3ListOperator
-from airflow.providers.google.cloud.transfers.gcs_to_bigquery import GCSToBigQueryOperator
+from airflow import DAG
 from airflow.providers.google.cloud.operators.gcs import GCSListObjectsOperator
 from airflow.providers.google.cloud.operators.bigquery import  BigQueryInsertJobOperator
 from airflow.operators.python import PythonOperator
@@ -42,6 +38,7 @@ def create_query(**kwargs):
 with DAG(
     dag_id="gcs_csv_to_big_query", 
     start_date=datetime(2024, 6, 24), 
+    schedule_interval='@daily',
     catchup = True,
     ):
 
