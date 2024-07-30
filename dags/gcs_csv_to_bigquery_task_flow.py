@@ -29,7 +29,7 @@ def create_query(**kwargs):
     INSERT_ROWS_QUERY = (
     f"""
     LOAD DATA INTO {DATASET_NAME}.raw (title string, link string, summary string, authors string, published string, tags string, inserted_at string, file_name string)
-    FROM FILES (skip_leading_rows=1, format = 'CSV', uris = {str(files)});
+    FROM FILES (skip_leading_rows=1, allow_quoted_newlines=True, format = 'CSV', uris = {str(files)});
     """
     )
     return INSERT_ROWS_QUERY
