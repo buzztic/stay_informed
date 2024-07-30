@@ -5,3 +5,4 @@ logs/*
 data/*
 .envrc
 credentials/*
+streamlit/.streamlit/secrets.toml
