@@ -5,7 +5,7 @@ WITH ranked_data AS (
         *,
         row_number() OVER (PARTITION BY title ORDER BY inserted_at DESC) AS row_num
     FROM
-        dev_stay_informed.raw_rssfeed
+        {{ var('dataset') }}.raw_rssfeed
 )
 
 SELECT
