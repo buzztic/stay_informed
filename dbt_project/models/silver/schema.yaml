@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: silver
+    description: "Silver model"
+sources:
+  - name: dev_stay_informed
+    database: stay-informed-429009
+    tables:
+      - name: raw
