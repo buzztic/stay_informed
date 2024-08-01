@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: silver
+    description: "Silver model"
+sources:
+  - name: google_storage
+    database: stay-informed-429009
+    schema: stay-informed
+    tables:
+      - name: raw
