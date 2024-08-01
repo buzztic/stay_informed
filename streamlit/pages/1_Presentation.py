@@ -42,8 +42,6 @@ def run_query(query):
     df = results.to_dataframe()
     return df
 
-st.header("Stay informed presentation")
-
 nb_articles = run_query(query_articles).iloc[0].values[0]
 nb_sources = run_query(query_sources).iloc[0].values[0]
 
@@ -56,13 +54,13 @@ max_date = datetime.strptime(max_date, '%y-%m-%d')
 
 delta = max_date - min_date
 
-st.subheader("KPI", divider=True)
+st.header("📊 Some KPI", divider=True)
 col1, col2, col3 = st.columns(3)
 col1.metric("Number of articles", nb_articles)
 col2.metric("Number of sources", nb_sources)
 col3.metric("Articles per day", round(nb_articles/delta.days))
 
-st.subheader("Our sources", divider=True)
+st.header("📰 Our sources", divider=True)
 
 image_dict = {
 "bbc" :"https://upload.wikimedia.org/wikipedia/commons/6/65/BBC_logo_%281997-2021%29.svg",
@@ -82,13 +80,13 @@ col4, col5, col6 = st.columns(3)
 
 # Insert logos in each column
 with col4:
-    st.markdown("_english speacking_")
+    st.markdown("_english speaking_")
     st.image(image_dict["bbc"], width = 150)
     st.image(image_dict["the daily telegraph"], width = 150)
     st.image(image_dict["metro"], width = 150)
 
 with col5:
-    st.markdown("_french speacking_")
+    st.markdown("_french speaking_")
     st.image(image_dict["le monde"], width = 150)
     st.image(image_dict["liberation"], width = 150)
     st.image(image_dict["la libre"], width = 150)
@@ -96,6 +94,6 @@ with col5:
     st.image(image_dict["france info"], width = 120)
 
 with col6:
-    st.markdown("_german speacking_")
+    st.markdown("_german speaking_")
     st.image(image_dict["die welt"], width = 150)
     st.image(image_dict["sueddeutsche"], width = 150)
