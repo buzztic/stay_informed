@@ -29,7 +29,10 @@ def run_query(query):
 start_date = datetime.date(2024, 6, 24)
 end_date = datetime.date.today() - datetime.timedelta(days=2)
 
-date = st.date_input("From which date do want somes news ?", end_date, start_date, end_date)
+
+st.title("Stay informed")
+
+date = st.date_input("Pick a date:", end_date, start_date, end_date)
 
 
 summary = run_query(f"""
@@ -55,10 +58,7 @@ rows = run_query(f"""
  """)
 
 
-
-# Print results.
-
 st.markdown(summary[0]['summary'])
-st.write("10 randoms articles from that day:")
+st.markdown("## 🕵️ 10 randoms articles for digging the news:")
 for row in rows:
     st.markdown("✍️ " + f"[{row['title']}]({row['link']})")
