@@ -6,3 +6,9 @@ data/*
 .envrc
 credentials/*
 streamlit/.streamlit/secrets.toml
+dbt_project/logs/*
+dbt_project/target/*
+dbt_project/.user.yml
+dbt_project/profiles.yml
+dbt_project/stayinformed.json
+dbt_project/models/schema.yaml
