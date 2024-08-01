@@ -28,9 +28,6 @@ with DAG(
         docker_url='unix://var/run/docker.sock',
         network_mode='bridge',
         mounts = [
-            #Mount(source="/home/yohann.bacquey/code/BacqueyYohann/stay_informed/dbt_project", target="/usr/app", type="bind"),
-            #Mount(source="/home/yohann.bacquey/code/BacqueyYohann/stay_informed/dbt_project/profiles.yaml",target="/root/.dbt/profiles.yml",type="bind"),
-            #Mount(source="/home/yohann.bacquey/.gcp_keys/stay_informed.json", target="/dbt/stayinformed.json",type="bind")
             Mount(source=os.getenv('dbtpath'), target="/usr/app", type="bind"),
             Mount(source=os.getenv('pfpath'),target="/root/.dbt/profiles.yml",type="bind"),
             Mount(source=os.getenv('sapath'), target="/dbt/stayinformed.json",type="bind")
