@@ -14,7 +14,7 @@ def print_debut():
     logging.info(f"sa path variable : {os.getenv('sapath')}")
 
 with DAG(
-    'run_dbt_cleaning',
+    'transform_raw_to_silver',
     description='Check if dataset exist and create if not',
     start_date=datetime(2024, 7, 18),
     schedule_interval='@daily',
