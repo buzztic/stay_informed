@@ -48,7 +48,7 @@ sources_list = ", ".join(f'"{source}"' for source in options)
 query_multi = f"""
 SELECT
     ARRAY_TO_STRING(ARRAY_AGG(title), ' ') AS combined_summary
-FROM `stay-informed-429009.dev_stay_informed.gold`
+FROM `stay-informed-429009.stay_informed.gold`
 WHERE date = '{date}'
     AND source IN ({sources_list})
 """

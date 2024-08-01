@@ -18,21 +18,21 @@ credentials = service_account.Credentials.from_service_account_info(
 client = bigquery.Client(credentials=credentials)
 
 query_articles = f"""
-SELECT count(*) FROM `stay-informed-429009.dev_stay_informed.gold`
+SELECT count(*) FROM `stay-informed-429009.stay_informed.gold`
 """
 query_sources = f"""
 With sources as (
 SELECT source
-FROM `stay-informed-429009.dev_stay_informed.gold`
+FROM `stay-informed-429009.stay_informed.gold`
 group by source)
 select count(*) as nb_source from sources
 """
 
 query_min_day = f"""
-select min(date) as min_date from `stay-informed-429009.dev_stay_informed.gold`
+select min(date) as min_date from `stay-informed-429009.stay_informed.gold`
 """
 query_max_day = f"""
-select max(date) as max_date from `stay-informed-429009.dev_stay_informed.gold`
+select max(date) as max_date from `stay-informed-429009.stay_informed.gold`
 """
 
 @st.cache_data(ttl=600)

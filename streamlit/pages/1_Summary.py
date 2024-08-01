@@ -15,7 +15,7 @@ credentials = service_account.Credentials.from_service_account_info(
 )
 client = bigquery.Client(credentials=credentials)
 
-DATABASE = 'dev_stay_informed'
+DATABASE = 'stay_informed'
 PROJECT ='stay-informed-429009'
 
 # Perform query.
@@ -39,23 +39,23 @@ date = st.date_input("Pick a date:", end_date, start_date, end_date)
 
 
 summary = run_query(f"""
-    SELECT summary 
-    FROM `{PROJECT}.{DATABASE}.summaries` 
+    SELECT summary
+    FROM `{PROJECT}.{DATABASE}.summaries`
     WHERE date = '{date}'
 """)
 
 rows = run_query(f"""
     WITH row_count AS (
         SELECT COUNT(*) AS row_count
-        FROM `{PROJECT}.{DATABASE}.gold` 
+        FROM `{PROJECT}.{DATABASE}.gold`
     )
-                 
-    SELECT 
+
+    SELECT
         title
-        , link 
-    FROM `{PROJECT}.{DATABASE}.gold` 
+        , link
+    FROM `{PROJECT}.{DATABASE}.gold`
     LEFT JOIN row_count ON 1=1
-    WHERE date = '{date}' 
+    WHERE date = '{date}'
     ORDER BY FARM_FINGERPRINT(FORMAT('%T', (title || link, "random_seed_2")))
     LIMIT 10
  """)
