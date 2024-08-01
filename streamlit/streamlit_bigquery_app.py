@@ -3,7 +3,10 @@
 import streamlit as st
 from google.oauth2 import service_account
 from google.cloud import bigquery
-
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+import nltk
+from nltk.corpus import stopwords
 import datetime
 
 # Create API client.

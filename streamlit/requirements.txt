@@ -2,3 +2,6 @@ altair
 pandas
 streamlit
 google-cloud-bigquery
+wordcloud
+nltk
+db-dtypes
