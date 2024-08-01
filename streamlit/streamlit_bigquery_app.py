@@ -12,7 +12,8 @@ credentials = service_account.Credentials.from_service_account_info(
 )
 client = bigquery.Client(credentials=credentials)
 
-
+DATABASE = 'dev_stay_informed'
+PROJECT ='stay-informed-429009'
 
 # Perform query.
 # Uses st.cache_data to only rerun when the query changes or after 10 min.
@@ -30,10 +31,34 @@ end_date = datetime.date.today() - datetime.timedelta(days=2)
 
 date = st.date_input("From which date do want somes news ?", end_date, start_date, end_date)
 
-rows = run_query(f"SELECT title, link FROM `stay-informed-429009.dev_stay_informed.gold` WHERE date = '{date}' LIMIT 10 ")
+
+summary = run_query(f"""
+    SELECT summary 
+    FROM `{PROJECT}.{DATABASE}.summaries` 
+    WHERE date = '{date}'
+""")
+
+rows = run_query(f"""
+    WITH row_count AS (
+        SELECT COUNT(*) AS row_count
+        FROM `{PROJECT}.{DATABASE}.gold` 
+    )
+                 
+    SELECT 
+        title
+        , link 
+    FROM `{PROJECT}.{DATABASE}.gold` 
+    LEFT JOIN row_count ON 1=1
+    WHERE date = '{date}' 
+    ORDER BY FARM_FINGERPRINT(FORMAT('%T', (title || link, "random_seed_2")))
+    LIMIT 10
+ """)
+
+
 
 # Print results.
 
-st.write("Somes articles from that days")
+st.markdown(summary[0]['summary'])
+st.write("10 randoms articles from that day:")
 for row in rows:
     st.markdown("✍️ " + f"[{row['title']}]({row['link']})")
