@@ -39,10 +39,11 @@ source_choice = ["bbc","metro", "die welt", "l'avenir","la libre","le monde","li
 options = st.multiselect(
     "Select the sources",
     source_choice,
-    ["bbc"],
+    ["bbc","metro","the daily telegraph"],
 )
 
-sources_list = ", ".join([f"'{source}'" for source in options])
+# Join the quoted sources with commas
+sources_list = ", ".join(f'"{source}"' for source in options)
 
 query_multi = f"""
 SELECT
