@@ -8,6 +8,7 @@ from airflow.operators.bash import BashOperator
 from airflow.operators.docker_operator import DockerOperator
 from docker.types import Mount
 from airflow.operators.python import PythonOperator
+from airflow.sensors.external_task import ExternalTaskSensor
 import logging
 
 def print_debut():
@@ -21,6 +22,13 @@ with DAG(
     catchup = False
 ) as dag:
     #print(f"sa path variable : {os.getenv('sapath')}")
+
+    wait_for_gcs_csv_to_big_query = ExternalTaskSensor(
+        task_id='wait_for_gcs_csv_to_big_query',
+        external_dag_id='gcs_csv_to_big_query',
+        external_task_id='insert_query_job'
+    )
+
     run_dbt_docker = DockerOperator(
         task_id='run_dbt_docker',
         image='ghcr.io/dbt-labs/dbt-bigquery:1.8.2',
@@ -40,4 +48,4 @@ with DAG(
     )
 
 #    run_docker_compose >> down_docker_compose
-    run_dbt_docker
+    wait_for_gcs_csv_to_big_query >> run_dbt_docker

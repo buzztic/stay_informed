@@ -4,6 +4,7 @@ from airflow import DAG
 from airflow.providers.google.cloud.operators.gcs import GCSListObjectsOperator
 from airflow.providers.google.cloud.operators.bigquery import  BigQueryInsertJobOperator
 from airflow.operators.python import PythonOperator
+from airflow.sensors.external_task import ExternalTaskSensor
 import os
 import re
 
@@ -36,13 +37,17 @@ def create_query(**kwargs):
 
 
 with DAG(
-    dag_id="gcs_csv_to_big_query", 
-    start_date=datetime(2024, 6, 24), 
+    dag_id="gcs_csv_to_big_query",
+    start_date=datetime(2024, 6, 24),
     schedule_interval='@daily',
     catchup = True,
     ):
 
-
+    wait_for_GCS_xml_to_GCS_csv = ExternalTaskSensor(
+        task_id='wait_for_GCS_xml_to_GCS_csv',
+        external_dag_id='GCS_xml_to_GCS_csv',
+        external_task_id='preprocess_rss_feeds'
+    )
 
     files = GCSListObjectsOperator(
         task_id="get_all_objects",
@@ -75,4 +80,4 @@ with DAG(
     )
 
 
-    files >> files_filtered >> create_query_task >> insert_query_job
+    wait_for_GCS_xml_to_GCS_csv >> files >> files_filtered >> create_query_task >> insert_query_job

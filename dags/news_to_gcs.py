@@ -1,6 +1,7 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
+from airflow.sensors.external_task import ExternalTaskSensor
 from datetime import  datetime
 import csv
 import requests
@@ -57,6 +58,13 @@ dag = DAG(
     catchup = False
 )
 with dag:
+
+    wait_for_dataset_creation = ExternalTaskSensor(
+        task_id='wait_for_dataset_creation',
+        external_dag_id='dataset_creation',
+        external_task_id='create_raw_table'
+    )
+
     get_csv_task = PythonOperator(
         task_id='get_csv_data',
         python_callable=get_csv_data,
@@ -67,4 +75,4 @@ with dag:
         python_callable=process_rss_feeds,
     )
 
-    get_csv_task >> process_rss_task
+    wait_for_dataset_creation >> get_csv_task >> process_rss_task

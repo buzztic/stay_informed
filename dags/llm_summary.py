@@ -3,11 +3,12 @@ import google.generativeai as genai
 
 from airflow import DAG
 from airflow.providers.google.cloud.operators.bigquery import  (
-    BigQueryGetDataOperator, 
+    BigQueryGetDataOperator,
     BigQueryExecuteQueryOperator,
     BigQueryInsertJobOperator
 )
 from airflow.operators.python import PythonOperator
+from airflow.sensors.external_task import ExternalTaskSensor
 from google.cloud import bigquery
 import logging
 import os
@@ -46,11 +47,17 @@ def create_summary(ti):
 
 
 with DAG(
-    dag_id="llm_summary", 
-    start_date=datetime(2024, 6, 24), 
+    dag_id="llm_summary",
+    start_date=datetime(2024, 6, 24),
     schedule_interval='@daily',
     catchup = True,
     ):
+
+    wait_for_transform_raw_to_silver = ExternalTaskSensor(
+        task_id='wait_for_transform_raw_to_silver',
+        external_dag_id='transform_raw_to_silver',
+        external_task_id='run_dbt_docker'
+    )
 
     create_summary_table = BigQueryExecuteQueryOperator(
         task_id="create_summary_table",
@@ -99,6 +106,6 @@ with DAG(
                 }
             },
     )
-
-    execute_query >> fetch_titles >> create_summary_task >> create_summary_table 
+    wait_for_transform_raw_to_silver >> execute_query
+    execute_query >> fetch_titles >> create_summary_task >> create_summary_table
     create_summary_table >> create_insert_query_task >> insert_query_job

@@ -3,6 +3,7 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.google.cloud.operators.gcs import GCSListObjectsOperator
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 from airflow.utils.dates import days_ago
+from airflow.sensors.external_task import ExternalTaskSensor
 from datetime import timedelta, datetime
 import csv
 import requests
@@ -80,6 +81,12 @@ with dag:
 
     BUCKET = os.getenv('BUCKET_NAME')
 
+    wait_for_rss_feed_processor = ExternalTaskSensor(
+        task_id='wait_for_rss_feed_processor',
+        external_dag_id='rss_feed_processor',
+        external_task_id='process_rss_feeds'
+    )
+
     list_gcs_objects_task = GCSListObjectsOperator(         #This task fetches all file names inside the raw folder
     task_id='list_gcs_objects',
     bucket = BUCKET,
@@ -98,4 +105,4 @@ with dag:
     python_callable=preprocess_RSS_feed_to_tabular,
     )
 
-    list_gcs_objects_task >> gcs_objects_to_process_task >> preprocess_task
+    wait_for_rss_feed_processor >> list_gcs_objects_task >> gcs_objects_to_process_task >> preprocess_task
